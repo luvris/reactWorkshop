@@ -1,39 +1,51 @@
 import { useState } from "react";
-import NameInput from "../component/NameInput";
-import AgeButton from "../component/AgeButton";
-import AgeMessage from "../component/AgeMessage";
+import TodoList from "../component/TodoList";
+import TodoForm from "../component/TodoForm";
 
 function App() {
-  const [name, setName] = useState("");
-  const [age, setAge] = useState(0);
 
-  function nameChange(e) {
-    setName(e.target.value);
+  const [todos, setTodos] = useState([{ id: 1, text: "Task one" },
+  { id: 2, text: "Task two" }
+  ]);
+
+  const [todosInput, setTodosInput] = useState("");
+
+  function delTask(id) {
+    setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
   }
 
-  function resetAll(){
-    setAge(0);
-    setName("");
+  function addTodos() {
+    if (todosInput.trim() === "") {
+      return;
+    }
+
+    const newTask = {
+      id: Date.now(),
+      text: todosInput
+    };
+
+    setTodos((prev) => [...prev, newTask]);
+    setTodosInput("");
   }
 
-  function ageIncrease() {
-    setAge((prev) => prev + 1);
-  }
-
-  function ageDecrease(){
-    setAge((prev) => prev > 0 ? prev - 1 : prev = 0);
+  function handleInputChange(e) {
+    setTodosInput(e.target.value);
   }
 
   return (
     <div>
-      <NameInput name={name} nameInputChange={nameChange} />
-      <AgeButton onIncrease={ageIncrease} onDecrease={ageDecrease} onReset={resetAll} isDisabledDecrease={age === 0}/>
-      <h2>
-        you are {age} years old.
-      </h2>
-      <AgeMessage age={age}/>
+
+      <TodoList
+        todos={todos}
+        onDel={delTask} />
+
+      <TodoForm 
+      onAddTodo={addTodos} 
+      onInputChange={handleInputChange} 
+      todosInput={todosInput} />
+
     </div>
   );
-}
 
+}
 export default App;
