@@ -1,42 +1,37 @@
 import { useState } from "react";
-import StatusMessage from "../component/StatusMessage";
-import CounterButtons from "../component/CounterButton";
-import NameComponent from "../component/NameComponent";
+import NameInput from "../component/NameInput";
+import AgeButton from "../component/AgeButton";
+import AgeMessage from "../component/AgeMessage";
 
 function App() {
-  const [counterNum, setCounterNum] = useState(0);
-  const [nameInput, setNameInput] = useState("");
+  const [name, setName] = useState("");
+  const [age, setAge] = useState(0);
 
-  function countNumber() {
-    setCounterNum((prev) => prev + 1);
+  function nameChange(e) {
+    setName(e.target.value);
   }
 
-  function decCountNumber() {
-    setCounterNum((prev) => (prev > 0 ? prev - 1 : 0));
+  function resetAll(){
+    setAge(0);
+    setName("");
   }
 
-  function resetCountNumber() {
-    setCounterNum(0);
+  function ageIncrease() {
+    setAge((prev) => prev + 1);
   }
 
-  function updatName(e) {
-    setNameInput(e.target.value);
+  function ageDecrease(){
+    setAge((prev) => prev > 0 ? prev - 1 : prev = 0);
   }
 
   return (
     <div>
-      <h1>Number of your clicks : {counterNum}</h1>
-
-      <CounterButtons
-        onIncrease={countNumber}
-        onDecrease={decCountNumber}
-        onReset={resetCountNumber}
-        isDecreaseDisabled={counterNum === 0}
-      />
-
-      <StatusMessage counterNum={counterNum} />
-
-      <NameComponent nameInput={nameInput} onInputChange={updatName} />
+      <NameInput name={name} nameInputChange={nameChange} />
+      <AgeButton onIncrease={ageIncrease} onDecrease={ageDecrease} onReset={resetAll} isDisabledDecrease={age === 0}/>
+      <h2>
+        you are {age} years old.
+      </h2>
+      <AgeMessage age={age}/>
     </div>
   );
 }
